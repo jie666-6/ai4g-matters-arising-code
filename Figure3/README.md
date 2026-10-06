@@ -1,7 +1,8 @@
 # Figure 3 – Luxembourg case (July 2021 flood)
 
-`extract_flood_day.py` extracts the AI4G flood detections of a single Sentinel-1
-acquisition day from the public AI4G flood dataset and writes them to a GeoTIFF.
+`rasterize_ai4g_luxemborg2021.py` rasterizes the AI4G flood detections onto the
+same grid and CRS of a reference raster (e.g. GFM data), so the
+AI4G can be compared directly to this reference raster.
 
 No buffer is applied: every detection point is burned into one pixel. The public
 AI4G release does not provide buffered single-day (event-level) flood maps, so the
@@ -17,26 +18,37 @@ figure shows the detections as released.
 ## Requirements
 
 ```
-pip install pandas numpy rasterio pyarrow
+pip install pandas numpy rasterio pyarrow geopandas shapely
 ```
 
 ## Commands
 
-Run from the folder that contains the parquet file.
-
-Raw detections, 15 July 2021:
+Rasterize AI4G detections onto the GFM reference grid for the 2021 Luxemborg flood event (15 July 2021):
 
 ```
-python extract_flood_day.py --parquet N48E006-post-processing.parquet --tile N48E006 --date 2021-07-15 --out N48E006_2021-07-15_raw.tif
+python rasterize_ai4g_luxemborg2021.py \
+    --parquet N48E006-post-processing.parquet \
+    --example-raster gfm_ensemble_luxburg_jul21.tif \
+    --date 2021-07-15 \
+    --out ai4g_luxemborg2021_raw.tif
 ```
 
 Detections after the post-processing filter recommended in the AI4G README:
 
 ```
-python extract_flood_day.py --parquet N48E006-post-processing.parquet --tile N48E006 --date 2021-07-15 --filtered --out N48E006_2021-07-15_filtered.tif
+python rasterize_ai4g_luxemborg2021.py \
+    --parquet N48E006-post-processing.parquet \
+    --example-raster gfm_ensemble_luxburg_jul21.tif \
+    --date 2021-07-15 \
+    --filtered \
+    --out ai4g_luxemborg2021_filtered.tif
 ```
+
+The output GeoTIFF shares the grid, CRS and dtype of the reference
+`--example-raster`; values are `1` where an AI4G detection is burned and `0`
+elsewhere.
 
 ## Output
 
-- GeoTIFF, EPSG:4326, 0.00018° pixel size (as stated in the AI4G README), extent of the 3° x 3° tile.
-- Values: `2` = AI4G flood detection, `0` = no detection (nodata).
+- GeoTIFF, EPSG:27704, 20m pixel size.
+- Values: `1` = AI4G flood detection, `0` = no detection.

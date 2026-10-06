@@ -11,9 +11,9 @@ figure shows the detections as released.
 ## Input data
 
 - AI4G flood dataset, tile `N48E006` (`N48E006-post-processing.parquet`),
-  downloaded from [URL], version/commit [xxx], accessed [date].
+  downloaded from https://huggingface.co/datasets/ai-for-good-lab/ai4g-flood-dataset, version/commit d89a20673fc91c7cc1a183ade0086b1941ca73ae, accessed 2025-07-28.
 - Copernicus EMS Rapid Mapping activation EMSN139 (Luxembourg, July 2021), used as reference.
-- GFM flood extent: [product/version, date].
+- GFM flood extent: v3.2, accessed 2025-07-29.
 
 ## Requirements
 
@@ -28,7 +28,7 @@ Rasterize AI4G detections onto the GFM reference grid for the 2021 Luxemborg flo
 ```
 python rasterize_ai4g_luxemborg2021.py \
     --parquet N48E006-post-processing.parquet \
-    --example-raster gfm_ensemble_luxburg_jul21.tif \
+    --example-raster gfm_flood_extent.tif \
     --date 2021-07-15 \
     --out ai4g_luxemborg2021_raw.tif
 ```
@@ -38,7 +38,7 @@ Detections after the post-processing filter recommended in the AI4G README:
 ```
 python rasterize_ai4g_luxemborg2021.py \
     --parquet N48E006-post-processing.parquet \
-    --example-raster gfm_ensemble_luxburg_jul21.tif \
+    --example-raster gfm_flood_extent.tif \
     --date 2021-07-15 \
     --filtered \
     --out ai4g_luxemborg2021_filtered.tif
